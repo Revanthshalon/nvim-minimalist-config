@@ -100,6 +100,9 @@ return {
 				svelte = { "prettier" },
 				json = { "prettier" },
 				yaml = { "prettier" },
+				["yaml.helm-values"] = { "prettier" },
+				-- Helm templates contain Go template syntax that YAML formatters break
+				helm = {},
 				graphql = { "prettier" },
 				liquid = { "prettier" },
 				lua = { "stylua" },

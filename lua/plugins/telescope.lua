@@ -14,15 +14,19 @@ return {
 		{ "<leader>fb", "<cmd>Telescope buffers<cr>", desc = "Telescope Find Buffers" },
 		{ "<leader>ld", "<cmd>Telescope diagnostics<cr>", desc = "List Diagnostics" },
 		{ "<leader>lsd", "<cmd>Telescope lsp_document_symbols<cr>", desc = "List Document Symbols" },
+		{ "<leader>pr", "<cmd>Telescope oldfiles<cr>", desc = "Fuzzy find recent files" },
+		{
+			"<leader>pWs",
+			function()
+				require("telescope.builtin").grep_string({ search = vim.fn.expand("<cWORD>") })
+			end,
+			desc = "Find Connected Words under cursor",
+		},
+		{ "<leader>ths", "<cmd>Telescope themes<cr>", desc = "Theme Switcher" },
 	},
 	config = function()
 		local telescope = require("telescope")
 		local actions = require("telescope.actions")
-		local builtin = require("telescope.builtin")
-
-		telescope.load_extension("fzf")
-		telescope.load_extension("themes")
-
 		telescope.setup({
 			defaults = {
 				path_display = { "smart" },
@@ -45,20 +49,8 @@ return {
 			},
 		})
 
-		-- Keymaps
-		vim.keymap.set("n", "<leader>pr", "<cmd>Telescope oldfiles<CR>", { desc = "Fuzzy find recent files" })
-		vim.keymap.set("n", "<leader>pWs", function()
-			local word = vim.fn.expand("<cWORD>")
-			builtin.grep_string({ search = word })
-		end, { desc = "Find Connected Words under cursor" })
-
-		vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Telescope find files" })
-
-		vim.keymap.set(
-			"n",
-			"<leader>ths",
-			"<cmd>Telescope themes<CR>",
-			{ noremap = true, silent = true, desc = "Theme Switcher" }
-		)
+		-- load extensions after setup so they pick up their config
+		telescope.load_extension("fzf")
+		telescope.load_extension("themes")
 	end,
 }

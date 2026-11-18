@@ -28,6 +28,33 @@ vim.g.loaded_ruby_provider = 0
 vim.g.loaded_perl_provider = 0
 vim.g.loaded_node_provider = 0
 
+-- Detect compose files so docker_compose_language_service attaches only to them
+vim.filetype.add({
+  filename = {
+    ["docker-compose.yml"] = "yaml.docker-compose",
+    ["docker-compose.yaml"] = "yaml.docker-compose",
+    ["compose.yml"] = "yaml.docker-compose",
+    ["compose.yaml"] = "yaml.docker-compose",
+  },
+})
+
+-- Detect Helm charts (only inside a directory tree that has a Chart.yaml)
+local function helm_ft(ft)
+  return function(path)
+    if vim.fs.root(path, "Chart.yaml") then
+      return ft
+    end
+  end
+end
+vim.filetype.add({
+  pattern = {
+    [".*/templates/.*%.ya?ml"] = helm_ft("helm"),
+    [".*/templates/.*%.tpl"] = helm_ft("helm"),
+    [".*/templates/NOTES%.txt"] = helm_ft("helm"),
+    [".*/values[^/]*%.ya?ml"] = helm_ft("yaml.helm-values"),
+  },
+})
+
 -- Setup word wraps for markdown
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "markdown",

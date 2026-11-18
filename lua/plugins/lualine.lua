@@ -29,14 +29,14 @@ return {
 		}
 
 		-- Replaced git branch icon with a text label
-		local branch = { "branch", icon = "Branch:", "|" }
+    local branch = { "branch", icon = "Branch:" }
 
 		lualine.setup({
 			-- 1. Globally disable devicon integrations
-			icons_enabled = false,
 			options = {
 				component_separators = { left = "|", right = "|" },
 				section_separators = { left = "|", right = "" },
+        icons_enabled = false,
 			},
 			sections = {
 				lualine_a = { mode },

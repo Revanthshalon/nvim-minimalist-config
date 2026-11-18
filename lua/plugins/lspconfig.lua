@@ -18,18 +18,33 @@ return {
         },
       },
       protols = {
-        root_dir = vim.fs.root(0, { "protols.toml", "buf.yaml", ".git" }),
+        root_markers = { "protols.toml", "buf.yaml", ".git" },
       },
       docker_compose_language_service = {
         cmd = { "docker-compose-langserver", "--stdio" },
-        filetypes = { "yaml" },
+        filetypes = { "yaml.docker-compose" },
         root_markers = { "docker-compose.yaml", "docker-compose.yml", "compose.yaml", "compose.yml" },
+      },
+      helm_ls = {
+        settings = {
+          ["helm-ls"] = {
+            yamlls = { enabled = true, path = "yaml-language-server" },
+          },
+        },
+      },
+      -- helm_ls runs yamlls internally for helm files; keep the standalone yamlls off them
+      yamlls = {
+        filetypes = { "yaml", "yaml.docker-compose", "yaml.gitlab" },
       },
       postgres_lsp = {},
       ts_ls = {},
       basedpyright = {
-        analysis = {
-          typeCheckingMode = "basic",
+        settings = {
+          basedpyright = {
+            analysis = {
+              typeCheckingMode = "basic",
+            },
+          },
         },
         before_init = function(_, config)
           local function get_python_path(workspace)
@@ -70,7 +85,7 @@ return {
       tofu_ls = {
         cmd = { "tofu-ls", "serve" },
         filetypes = { "opentofu", "opentofu-vars" },
-        root_dir = vim.fs.root(0, { ".terraform", ".git" }),
+        root_markers = { ".terraform", ".git" },
       },
       svelte = {},
       clangd = {
